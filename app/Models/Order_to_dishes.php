@@ -12,5 +12,9 @@ class Order_to_dishes extends Model
     {
         return $this->hasManyThrough(Order::class, Dishes::class);
     }
+    protected $fillable =[
+        'dish_id',
+        'order_id'
+    ];
     use HasFactory;
 }

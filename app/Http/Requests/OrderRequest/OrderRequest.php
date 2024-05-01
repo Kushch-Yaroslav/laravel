@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\DishesRequest;
+namespace App\Http\Requests\OrderRequest;
 
+use App\Enums\Payment_method;
+use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class DishesUpdateRequest extends FormRequest
+class OrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +24,10 @@ class DishesUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'ingredients' => 'required|array',
-            'ingredients.*' => 'required|string|max:255',
-        ];
+            'user_id' => 'required|integer|exists:users,id',
+            'status'=>'required|boolean',
+            'payment_method'=>'required|in:' . implode(',', Payment_method::getValues()),
+            'dish'=>'required|array',
+            ];
     }
-
 }

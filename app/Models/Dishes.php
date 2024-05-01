@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Dishes extends Model
 {
-    public function orders_to_dishes(): belongsToMany
+    public function orders(): belongsToMany
     {
-        return $this->belongsToMany(Order_to_dishes::class);
+        return $this->belongsToMany(Order::class, 'order_dish');
     }
+    protected $fillable = [
+      'title',
+      'description',
+      'price',
+      'ingredients'
+    ];
 
     use HasFactory;
 }

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UserService;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthService
 {
