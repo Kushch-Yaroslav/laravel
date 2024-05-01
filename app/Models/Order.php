@@ -14,9 +14,14 @@ class Order extends Model
     {
     return $this->belongsTo(User::class);
     }
-    public function orders_to_dishes(): belongsToMany
+    public function dishes(): belongsToMany
     {
-        return $this->belongsToMany(Order_to_dishes::class);
+        return $this->belongsToMany(Dishes::class, 'order_dish');
     }
+    protected $fillable =[
+      'user_id',
+      'status',
+      'payment_method',
+    ];
     use HasFactory;
 }

@@ -14,7 +14,6 @@ class OrderToDishSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('orders_to_dishes')->truncate();
         Order_to_dishes::factory()->count(50)->create();
 
     }
