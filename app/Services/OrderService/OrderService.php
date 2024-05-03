@@ -53,11 +53,10 @@ class OrderService
         return $order->delete();
     }
 
-    public function addOrder(array $data): ?Order
+    public function addOrder(array $data,$user): ?Order
     {
         $order = new Order();
-
-        $order->user_id =$data['user_id'];
+        $order->user_id =$user;
         $order->status=$data['status'];
         $order->payment_method = $data['payment_method'];
         $order->total_price = $this->calculationSum($data['dish']) ?? null;

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\RegisterRequest;
+use App\Models\Gallery;
+use App\Models\Media;
+use App\Models\User;
 use App\Services\UserService\UserService;
 use Illuminate\Http\JsonResponse;
 
@@ -56,4 +59,5 @@ class UserController extends Controller
         $deleteUser = $this->userService->deleteUser($id);
         return new JsonResponse($deleteUser, 204);
     }
+
 }
