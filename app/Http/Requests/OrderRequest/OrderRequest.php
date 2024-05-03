@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests\UserRequests;
+namespace App\Http\Requests\OrderRequest;
 
+use App\Enums\Payment_method;
+use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class OrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +24,10 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|string|in:admin,guest,moderator',
-        ];
+//            'user_id' => 'required|integer|exists:users,id',
+            'status'=>'required|boolean',
+            'payment_method'=>'required|in:' . implode(',', Payment_method::getValues()),
+            'dish'=>'required|array',
+            ];
     }
-
 }

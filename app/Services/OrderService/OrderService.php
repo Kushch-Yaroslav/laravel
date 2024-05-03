@@ -1,54 +1,84 @@
 <?php
 
-namespace App\Services\UserService;
+namespace App\Services\OrderService;
 
-use App\Models\User;
+use App\Models\Dishes;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Collection;
 
 
-class UserService
+class OrderService
 {
     /**
-     * @param $userId
-     * @return User|null
+     * @param $order
+     * @return Order|null
      */
-    public function findUserById($userId): ?User
+    public function findOrderById($order): ?Order
     {
-        return User::find($userId);
+        return $order;
     }
 
     /**
      * @return Collection
      */
-    public function findAllUsers(): Collection
+    public function findAllOrders(): Collection
     {
-        return User::all();
+        return Order::all();
     }
 
     /**
-     * @param $userId
-     * @return null
-     */
-    public function deleteUser($userId)
-    {
-        return User::destroy($userId);
-    }
-
-    /**
-     * @param int $userId
+     * @param int $orderId
      * @param array $data
-     * @return User|null
+     * @return Order|null
      */
-    public function updateUser(int $userId, array $data): ?User
+    public function updateOrder(int $orderId, array $data): ?Order
     {
-        $user= User::findOrFail($userId);
-        $user->update(
-            ['name'=>$data['name'],
-             'email'=>$data['email'],
-             'password'=>bcrypt($data['password']),
-             'role'=>$data['role']]
+        $order= Order::findOrFail($orderId);
+        $order->update(
+            [   'user_id' => $data['user_id'],
+                'status'=>$data['status'],
+                'payment_method'=>$data['payment_method'],
+                'total_price'=>$data['total_price']]
         );
-        return $user->fresh();
+        return $order->fresh();
+    }
+
+
+    /**
+     * @param $order
+     * @return mixed
+     */
+    public function deleteOrder($order)
+    {
+        return $order->delete();
+    }
+
+    public function addOrder(array $data,$user): ?Order
+    {
+        $order = new Order();
+        $order->user_id =$user;
+        $order->status=$data['status'];
+        $order->payment_method = $data['payment_method'];
+        $order->total_price = $this->calculationSum($data['dish']) ?? null;
+        $order->save();
+
+        $order->dishes()->sync($data['dish']);
+
+        return $order->load('dishes');
+    }
+
+    /**
+     * @param array $dishIds
+     * @return int
+     */
+    protected function calculationSum(array $dishIds): int
+    {
+        $sum = 0;
+        foreach ($dishIds as $dishId) {
+            $dish = Dishes::find($dishId);
+            $sum += $dish->price;
+        }
+        return $sum;
     }
 }
 

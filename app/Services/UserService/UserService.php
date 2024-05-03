@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UserService;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,7 +12,7 @@ class UserService
      * @param $userId
      * @return User|null
      */
-    public function findUserById($userId): ?User
+    public function findUserById(int $userId): ?User
     {
         return User::find($userId);
     }
@@ -29,7 +29,7 @@ class UserService
      * @param $userId
      * @return null
      */
-    public function deleteUser($userId)
+    public function deleteUser(int $userId)
     {
         return User::destroy($userId);
     }

@@ -13,7 +13,6 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('orders')->truncate();
         Order::factory()->count(50)->create();
     }
 }
