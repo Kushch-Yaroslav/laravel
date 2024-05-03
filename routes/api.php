@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Role;
+use App\Http\Controllers\MediaController\MediaController;
 use App\Http\Controllers\UserController\AuthController;
 use App\Http\Controllers\UserController\UserController;
 use App\Http\Controllers\DishesController\DishesController;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -34,7 +35,9 @@ Route::post('/login',[AuthController::class,'login']);
 /*
  * User routes
  */
-Route::get('/user/{userId}', [UserController::class, 'show'])->middleware('check.token');
+Route::get('/user/{userId}', [UserController::class, 'show'])->middleware('check.token','check.role:' . implode(',',[ Role::Admin->value,
+        Role::Guest->value
+    ]));
 Route::get('/user/', [UserController::class, 'getAllUsers'])->middleware('check.token');
 Route::put('/user/{userId}',[UserController::class,'editUser'])->middleware('check.token');
 Route::delete('/user/{userId}',[UserController::class,'removeUser'])->middleware('check.token');
@@ -76,10 +79,11 @@ Route::get('/admin',[])
 
 
 /*
- * Image routes
+ * Media routes
  */
-Route::post('/image/upload',[ImageController::class,'upload']);
-Route::get('/image/get/{imageId}',[ImageController::class,'get']);
+Route::post('/user/{userId}/image',[MediaController::class,'addUserImage']);
+Route::post('/dishes/{dishId}/image',[MediaController::class,'addDishesImage']);
+Route::get('/image/{imageId}',[MediaController::class,'getMediaById']);
 
 
 //////INVOKE//////
