@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Services\OrderService\OrderService;
 use http\Env\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -22,7 +23,8 @@ class OrderController extends Controller
      */
     public function createOrder(OrderRequest $request):JsonResponse
     {
-       $createOrder = $this->orderService->addOrder($request->validated());
+        $user = $request->user('api')->id;
+       $createOrder = $this->orderService->addOrder($request->validated(),$user);
         return new JsonResponse($createOrder,201);
     }
 
@@ -52,6 +54,7 @@ class OrderController extends Controller
      */
     public function editOrder(OrderRequest $request, int $id):JsonResponse
     {
+
         $editOrder = $this->orderService->updateOrder($id,$request->validated());
         return new JsonResponse($editOrder,200);
     }

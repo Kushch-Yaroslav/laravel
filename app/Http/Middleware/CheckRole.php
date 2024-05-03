@@ -2,23 +2,24 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use App\Enums\Role;
 
 class CheckRole
 {
 
-    public function handle(Request $request, Closure $next,Role ...$roles): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $roleValue = array_map(fn(Role $role)=>$role->value,$roles);
-        $userRole = $request->user()?->role->value;
+        $userRole = $request->user('api') ? $request->user('api')->role:null;
 
-//        if(!in_array($userRole,$roleValue)){
-//
-//            return redirect();
-//        }
-        return $next($request);
+        foreach ($roles as $role) {
+        if($userRole===$role){
+            return $next($request);
+        }}
+        return response()->json(['message' => 'Not permission'],403);
     }
 }
