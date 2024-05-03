@@ -5,7 +5,7 @@ namespace App\Services\ImageService;
 use App\Models\Gallery;
 use Illuminate\Database\Eloquent\Collection;
 
-class ImageService
+class GalleryService
 {
     public function createImage(array $data): Gallery
     {
